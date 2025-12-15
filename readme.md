@@ -1,0 +1,176 @@
+## 配置mingw压缩包
+
+下载地址: https://github.com/niXman/mingw-builds-binaries/releases
+下载版本: x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0.7z
+
+解压配置环境变量
+```
+MINGW_HOME: C:\Users\hasee\.mingw\x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0\mingw64
+PATH: %MINGW_HOME%\bin
+```
+
+验证环境变量
+```
+gcc -v
+gcc --verison
+g++ --version
+g++ -v
+```
+
+编译测试文件
+```
+g++ main.cpp
+```
+编译好的产物a.exe直接执行
+```
+.\a.exe
+```
+
+## 配置cmake压缩包
+下载地址: https://cmake.org/download/
+下载版本: cmake-4.2.1-windows-x86_64.zip
+
+解压之后配置环境变量
+```
+CMAKE_HOME: C:\Users\hasee\.cmake\cmake-4.2.1-windows-x86_64
+PATH: %CMAKE_HOME%\bin
+```
+
+验证环境配置
+```
+cmake --version
+```
+
+## 安装VSCode插件
+- cmake tools: 构建工具cmake的插件, cmake项目初始化向导, 标准工程结构: /out, CMakeLists.txt用于生成Makefile, CMakePresets.json预设文件, 如
+```
+PS E:\github\cpp-practice> ls
+
+
+    Directory: E:\github\cpp-practice
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        2025/12/15     11:47                .vscode
+d-----        2025/12/15     11:52                out
+-a----        2025/12/15     11:35            265 CMakeLists.txt
+-a----        2025/12/15     11:36            965 CMakePresets.json
+-a----        2025/12/15     11:48            349 main.cpp
+-a----        2025/12/15     11:53         138553 main.exe
+-a----        2025/12/15     15:48           5728 readme.md
+```
+- c/c++: 调试工具, 一键运行调试, 自动生成tasks.json文件, 如
+```
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe 生成活动文件",
+            "command": "C:\\Users\\hasee\\.mingw\\x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0\\mingw64\\bin\\g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "调试器生成的任务。"
+        }
+    ],
+    "version": "2.0.0"
+}
+```
+- remote development: 远程开发工具, 添加一个远程之后, 会在本地客户端生成config文件
+
+```
+Host 192.168.18.100
+  HostName 192.168.18.100
+  User root
+```
+
+## SSH远程旧版Linux
+远程连接服务器进行开发时提示连接失败，查看服务器cli log显示：
+```
+error This machine does not meet Visual Studio Code Server's prerequisites, expected either...
+find GLIBC >= v2.28.0 (but found v2.17.0 instead) for GNU environments
+find /lib/ld-musl-x86_64.so.1, which is required to run the Visual Studio Code Server in musl environments
+```
+由于插件依赖基础库变更导致连接失败
+
+降级使用vscode 1.85 或者 1.98版本：
+
+https://code.visualstudio.com/updates/v1_85
+
+https://code.visualstudio.com/updates/v1_98
+
+## 配置免密SSH登录
+使用命令ssh-keygen生成新的密钥对。你可以选择在生成密钥对时为其指定不同的文件名。请注意，-f 后的id_rsa_linux 和 id_rsa_windows 只是示例文件名，你可以根据需要选择其他文件名。
+```
+ # 在 Linux 和 Mac 上
+ ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa_linux
+ ​
+ # 在 Windows 上
+ ssh-keygen -t rsa -b 2048 -f C:\Users\YourUsername\.ssh\id_rsa_windows
+ ​
+ # 如果你只有单平台使用 ssh
+ ssh-keygen
+```
+注意：当你在多个平台上使用 SSH 连接到不同的远程服务器时，可能需要为每个平台生成和使用不同的密钥对。这是因为每个平台（例如，Windows、Linux、Mac）可能有不同的文件系统和密钥文件位置，同时在安全性的考虑下，不同平台上的密钥对最好是独立的。
+
+下面以Windows生成密钥对, 给远程Linux分发公钥为例
+
+Windows输入`ssh-keygen -t rsa -b 2048 -f C:\Users\hasee\.ssh\id_rsa_windows`命令后一路回车
+
+会在`C:\Users\hasee\.ssh`目录下生成一对密钥
+- id_rsa_windows
+- id_rsa_windows.pub
+
+将生成的公钥（ id_rsa_windows.pub的内容）添加到你远程服务器的 authorized_keys 文件中，以允许连接。
+
+(1). 若你本机是Windows，手动复制公钥到远程Linux
+在远程服务器上，authorized_keys 文件通常存储在用户的 .ssh 目录中。具体路径可能为 ~/.ssh/authorized_keys。例如我的linux用户名是 root，那么 authorized_keys 文件的路径可能是 /root/.ssh/authorized_keys 。
+
+如果/root/.ssh/authorized_keys不存在, 请手动创建
+```
+ # 创建目录
+ mkdir ~/.ssh
+ # 进入目录
+ cd ~/.ssh
+ # 创建 authorized_keys 文件
+ touch authorized_keys
+ # 使用文本编辑器打开 authorized_keys 文件，并将你的公钥内容粘贴到其中
+ nano authorized_keys
+ # 保存并关闭文本编辑器。
+```
+
+(2). 若你本机是Linux，可以执行ssh-copy-id命令复制公钥到远程Linux
+ssh-copy-id 命令通常用于将你的公钥复制到远程服务器的 authorized_keys 文件中。-i 选项用于指定身份文件（即你的公钥文件）。在本机执行如下命令：
+```
+ ssh-copy-id -i id_rsa_Windows.pub name@ip
+```
+确保公钥文件 (id_rsa_Windows.pub) 在本地机器上的正确位置，并且你有读取该密钥的权限。同时，确保远程服务器上的用户 有一个 .ssh 目录，并且 authorized_keys 文件有正确的权限（通常是目录权限为 700，authorized_keys 文件权限为 600）。
+
+即可自动将本地的 id_rsa_Windows.pub 公钥内容追加到远程用户 name 的 ~/.ssh/authorized_keys 文件末尾；
+
+将添加公钥到远程服务器后，最后一步便是配置你的本地客户端。
+
+打开你的 SSH 客户端（本机）配置文件（也就是前面remote develop插件远程连接目标主机的时候生成的config文件，一般在C:\Users\hasee\.ssh\config），添加配置（IdentityFile 私钥文件路径），以指定使用哪个私钥文件。
+```
+Host 192.168.18.100
+  HostName 192.168.18.100
+  User root
+  IdentityFile C:\Users\hasee\.ssh\id_rsa_windows
+```
+
+以上, 完成免密SSH连接
