@@ -91,7 +91,7 @@ d-----        2025/12/15     11:52                out
     "version": "2.0.0"
 }
 ```
-- remote development: 远程开发工具, 添加一个远程之后, 会在本地客户端生成config文件
+- remote development: 远程开发工具, 添加一个远程之后, 会在本地客户端生成config文件, 保存在用户目录C:\Users\hasee\.ssh
 
 ```
 Host 192.168.18.100
