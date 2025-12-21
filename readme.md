@@ -174,3 +174,30 @@ Host 192.168.18.100
 ```
 
 以上, 完成免密SSH连接
+
+## jetbrains Clion集成开发环境
+在Setting->Build,Execution,Deployment->Toolchains
+
+支持MinGW平台和visual studio平台
+
+![img.png](img.png)
+
+选择以MinGW平台为例
+- Toolset: 支持手动下载指定mingw版本, 默认使用Clion中自带绑定的
+- CMake: 支持手动下载指定cmake版本, 默认使用Clion中自带绑定的
+
+例如我下载了多个mingw版本, 放在了用户目录C:\Users\hasee\.mingw, 可以为项目自由选择不同的mingw版本
+```
+C:\Users\hasee\.mingw>dir
+ Volume in drive C has no label.
+ Volume Serial Number is 5CD0-2D9F
+
+ Directory of C:\Users\hasee\.mingw
+
+2025/12/21  11:25    <DIR>          .
+2025/12/21  11:25    <DIR>          ..
+2025/12/21  11:24    <DIR>          x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev2
+2025/12/15  10:59    <DIR>          x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0
+               0 File(s)              0 bytes
+               4 Dir(s)  218,440,650,752 bytes free
+```
