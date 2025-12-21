@@ -186,7 +186,7 @@ Host 192.168.18.100
 - Toolset: 支持手动下载指定mingw版本, 默认使用Clion中自带绑定的
 - CMake: 支持手动下载指定cmake版本, 默认使用Clion中自带绑定的
 
-例如我下载了多个mingw版本, 放在了用户目录C:\Users\hasee\.mingw, 可以为项目自由选择不同的mingw版本
+例如我下载了多个(3)mingw版本, 放在了用户目录C:\Users\hasee\.mingw, 可以为项目自由选择不同的mingw版本
 ```
 C:\Users\hasee\.mingw>dir
  Volume in drive C has no label.
@@ -194,10 +194,15 @@ C:\Users\hasee\.mingw>dir
 
  Directory of C:\Users\hasee\.mingw
 
-2025/12/21  11:25    <DIR>          .
-2025/12/21  11:25    <DIR>          ..
+2025/12/21  22:56    <DIR>          .
+2025/12/21  22:56    <DIR>          ..
+2025/12/21  22:55    <DIR>          x86_64-13.2.0-release-win32-seh-ucrt-rt_v11-rev1
 2025/12/21  11:24    <DIR>          x86_64-14.2.0-release-win32-seh-ucrt-rt_v12-rev2
 2025/12/15  10:59    <DIR>          x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0
                0 File(s)              0 bytes
-               4 Dir(s)  218,440,650,752 bytes free
+               5 Dir(s)  216,971,264,000 bytes free
 ```
+
+我指定Toolset路径: C:\Users\hasee\.mingw\x86_64-13.2.0-release-win32-seh-ucrt-rt_v11-rev1\mingw64
+
+我指定CMake路径为bundled: C:\Program Files\JetBrains\CLion 2025.3.1\plugins\cmake\lib
